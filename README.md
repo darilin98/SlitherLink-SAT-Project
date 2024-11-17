@@ -67,7 +67,7 @@ Some of the adjacent edges can be non-existent, in that case they are removed fr
 ### Output
 
 The user will see all the edges drawn out (if a solution is possible)
-![[example-output.png]]
+![User output](example-output.png)
 
 ### Problems
 
