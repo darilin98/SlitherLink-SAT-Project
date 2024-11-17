@@ -227,8 +227,13 @@ def print_result(result):
             model.extend(int(v) for v in vars)      
     model.remove(0) # 0 is the end of the model, just ignore it
     
-    print(model)
-    
+    true_edge = 0
+    for element in model:
+        if element > 0:
+            true_edge = element
+            break
+    if true_edge == 0:
+        print("Loop Not Possible")
     vertical_index = GRID_LENGTH * (GRID_HEIGTH + 1)
     horizontal_index = 0
     offset = GRID_LENGTH * (GRID_HEIGTH + 1)

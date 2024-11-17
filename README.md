@@ -30,17 +30,17 @@ If the cell has the value 1, exactly one edge is true:
 
 1. At least one edge is true:
 
-   $$
-   e_1 \lor e_2 \lor e_3 \lor e_4
-   $$
+$$
+e_1 \lor e_2 \lor e_3 \lor e_4
+$$
 
 2. At most one edge is true:
 
    for each pair:
 
-   $$
-   \neg e_i \lor \neg e_j
-   $$
+$$
+\neg e_i \lor \neg e_j
+$$
 
 If the cell has the value 3, the clauses are just mirrored (exactly one is false)
 
@@ -64,12 +64,25 @@ $$
 
 Some of the adjacent edges can be non-existent, in that case they are removed from the list of neigbors before the generation of clauses
 
+### Output
+
+The user will see all the edges drawn out (if a solution is possible)
+[example-output.png]
+
+### Problems
+
+In its current state the encoding is not prohibiting the creation of multiple loops
+
+It could be solved by introducing another variable called reachability and check if all true edges are reachable from all other true edges
+
+However, despite many experiments I have not found a way to encode this into CNF
+
 ## User documentation
 
 Basic usage:
 
 ```
-sliding_puzzle.py [-h] [-i INPUT] [-o OUTPUT] [-s SOLVER] [-v {0,1}]
+slitherlink.py [-h] [-i INPUT] [-o OUTPUT] [-s SOLVER] [-v {0,1}]
 ```
 
 Command-line options:
@@ -82,36 +95,19 @@ Command-line options:
 
 ## Example instances
 
-- `input-2by2.in`: A 2x2 instance solvable in two steps.
-- `input-2by2-unsat.in`: An unsolvable 2x2 instance.
-- `input-3by3-unsat.in`: An unsolvable 3x3 instance (5 steps, the instance is solvable in 6 steps)
-- `input-3by3.in`: An easy, solvable 3x3 instance
-- `input-4by4.in`: An easy, solvable 3x3 instance
-- `input-4by4-hard.in`: A solvable instance that takes approximately 18s to solve on our machine
+- `input-elementary`: Smallest possible board
+- `input-numbers`: Standard size puzzle - solvable
+- `input-largeunsat`: Big, Unsolvable board
+- `input-small-unsat`: Small number-populated Unsolvable board
+- `input-hard-small`: Hard but solvable small board
+- `input-medium`: Decent sized board with a solution
 
 ## Experiments
 
-Experiments were run on Intel Core i5-1035G1i5 CPU (1.0 GHz) and 8 GB RAM on Ubuntu inside WSL2 (Windows 11). Time was measured with `hyperfine`.
+The experiments were run on an Apple M2 chip with 8 GB RAM on Mac OS X
 
-We focus on the puzzle from input-4by4-hard.in, and modulate the number of steps. The setup is far from ideal, and to get reproducible results we would need to test many different instances, so consider this only a toy experiment.
+No case that I have tested has resulted in the calculation time being longer than 0.01 s
 
-| _max steps_ | _time (s)_ | _solvable?_ |
-| ----------: | :--------- | :---------: |
-|           3 | 0.08       |      N      |
-|           6 | 0.12       |      N      |
-|           9 | 0.25       |      N      |
-|          12 | 0.38       |      N      |
-|          15 | 0.49       |      N      |
-|          18 | 0.64       |      N      |
-|          21 | 0.9        |      N      |
-|          24 | 1.5        |      N      |
-|          27 | 2.9        |      N      |
-|          30 | 9          |      N      |
-|          33 | 18         |      Y      |
-|          36 | 20         |      Y      |
-|          39 | 24         |      Y      |
-|          42 | 43         |      Y      |
+Due to the nature of this problem the solver either quickly recognizes that some cell conditions overlap thus leading to UNSAT
 
-![A plot of the results](plot.jpg)
-
-Looking at the data, we can make a guess that time grows exponentially with respect to the number of steps. Moreover, note that finding a solution is generally faster than showing that no solution exists. (The optimal number of steps for the puzzle above is 33.) Feel free to conduct more comprehensive expriments in your projects!
+And making large guaranteed solvable instances is way too difficult
