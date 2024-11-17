@@ -10,7 +10,7 @@ how many of the square's sides need to be included in the final loop.
 
 ### Variables
 
-To encode this problem we will be using two variables
+To encode this problem we will be using a single variable:
 
 $Edge(x,y,orientation)$ is a boolean that indicates whether an edge is present in the loop
 We need to specify whether an edge is vertical or horizontal otherwise we wouldn't be able to index them
@@ -19,22 +19,50 @@ This variable is crucial to determine which route our loop is taking - what edge
 Loading cell values (number constraints) from the input will determine which permutations of edges are valid
 For example if a cell has the value 3 there are 4 combinations of edges with (3 true, 1 false) which are valid
 
-The single loop constraint is the most complex constraint this problem has, and thus it requires another variable:
-$Reach(x, y)$ whether or not a vertex is reachable along a path containing only edges that are true
-
 ### Constraints
-
-To ensure that only one loop is present we need to check all pairs of edges $E \choose 2$ from a set of true edges $E$ and $Reach()$ must be true for every pair
-
-To check that only one loop is present we need to go through all true edges, make a set of vertices (x,y) which should be a part of the loop and then
-every vertex should be reachable from every other one in order for $Reach(x, y)$ to be true.
 
 Every vertex must have either 2 or no edges going through it - in any different case the loop would not adhere to the rules
 We can apply this rule on our variable by saying that every true edge must have 2 adjacent true edges
 
 #### Cell number constraint
 
-#### Basic loop constraint ()
+If the cell has the value 1, exactly one edge is true:
+
+1. At least one edge is true:
+
+   $$
+   e_1 \lor e_2 \lor e_3 \lor e_4
+   $$
+
+2. At most one edge is true:
+
+   for each pair:
+
+   $$
+   \neg e_i \lor \neg e_j
+   $$
+
+If the cell has the value 3, the clauses are just mirrored (exactly one is false)
+
+Finally, if the cell value is 2, exactly 2 edges are true which can be described as: At least two are true and At most two are true
+
+#### Basic loop constraint
+
+Every vertex must have either 2 or no edges going through it - in any different case the loop would not adhere to the rules
+We can apply this rule on our variable by saying that every true edge must have 2 ad
+
+1. At least one neighbor from each side is true if the original edge is true
+
+2. At most one neighbor from each side is true if the original edge is true
+
+The following formula is applied to both ends of the edge:
+
+$$
+\bigwedge_{1 \leq i \leq 3} \left( \neg e \lor n_1 \lor n_2 \lor n_3 \right)
+\quad \bigwedge_{1 \leq i < j \leq 3} \left( \neg e \lor \neg n_i \lor \neg n_j \right)
+$$
+
+Some of the adjacent edges can be non-existent, in that case they are removed from the list of neigbors before the generation of clauses
 
 ## User documentation
 
