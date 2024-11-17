@@ -67,7 +67,7 @@ Some of the adjacent edges can be non-existent, in that case they are removed fr
 ### Output
 
 The user will see all the edges drawn out (if a solution is possible)
-[example-output.png]
+![[example-output.png]]
 
 ### Problems
 
@@ -111,3 +111,5 @@ No case that I have tested has resulted in the calculation time being longer tha
 Due to the nature of this problem the solver either quickly recognizes that some cell conditions overlap thus leading to UNSAT
 
 And making large guaranteed solvable instances is way too difficult
+
+Performance could be tested better if I had figured out how to enforce the one single loop condition during runtime
